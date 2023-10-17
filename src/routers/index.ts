@@ -4,7 +4,7 @@ import authenticate from "../middlewares/authenticate";
 
 const AppRouter = Router();
 
-AppRouter.use(authenticate); // should be used before all routes that need authentication (all routes except /auth)
+// AppRouter.use(authenticate); // should be used before all routes that need authentication (all routes except /auth)
 AppRouter.use('/users', userRouter);
 
 

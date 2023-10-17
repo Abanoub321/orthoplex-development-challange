@@ -4,7 +4,7 @@
   "description": "This is Orthoplex Development Challange",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/index.ts",
+    "dev": "nodemon --exec ts-node ./index.ts",
     "build": "tsc",
     "start": "node dist/index.js"
   },

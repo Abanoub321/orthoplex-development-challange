@@ -4,3 +4,4 @@ type AppResponseType = {
     data?: any;
     stack?: string;
 }
+export default AppResponseType;
