@@ -39,7 +39,7 @@ class UserService {
         return user as User[];
     }
 
-    async update({ id, name, email, password }: Partial<User>) {
+    async update({ id, name, email }: Partial<User>) {
 
         let userExists = await this.findById(id!);
         if (userExists.length === 0) {
@@ -52,7 +52,7 @@ class UserService {
 
         const user = await prisma.$queryRaw`
             UPDATE "User"
-            SET name = ${name}, email = ${email}, password = ${password}
+            SET name = ${name}, email = ${email}
             WHERE id = ${id}
             RETURNING *
         `;
