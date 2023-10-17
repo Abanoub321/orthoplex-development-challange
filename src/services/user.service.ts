@@ -10,12 +10,12 @@ class UserService {
             throw new AppError('User already exists', 400);
         }
         let hashedPassword = await bcrypt.hash(password!, 10);
-        const user = await prisma.$queryRaw`
-            INSERT INTO "User" (name, email, password)
-            VALUES (${name}, ${email}, ${hashedPassword})
+        const user: User[] = await prisma.$queryRaw`
+            INSERT INTO "User" (name, email, password, "updatedAt")
+            VALUES (${name}, ${email}, ${hashedPassword}, NOW())
             RETURNING *
         `;
-        return user;
+        return user[0];
     }
 
     async findByEmail(email: string) {
@@ -34,19 +34,18 @@ class UserService {
     }
 
     async findById(id: number) {
-        const user = await prisma.$queryRaw`
+        const user: User[] = await prisma.$queryRaw`
             SELECT * FROM "User" WHERE id = ${id}
         `;
-        return user as User[];
+        if (user.length === 0) {
+            throw new AppError('User not found', 404);
+        }
+        return user[0]
     }
 
     async update({ id, name, email }: Partial<User>) {
-
-        let userExists = await this.findById(id!);
-        if (userExists.length === 0) {
-            throw new AppError('User not found', 404);
-        }
-        userExists = await this.findByEmailAndId(email!, id!);
+        await this.findById(id!);
+        let userExists = await this.findByEmailAndId(email!, id!);
         if (userExists.length > 0) {
             throw new AppError('User already exists', 400);
         }

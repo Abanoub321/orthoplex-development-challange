@@ -7,6 +7,11 @@ export const userSchema = Joi.object<User>({}).keys({
     password: Joi.string().required(),
 });
 
+export const updateUserSchema = Joi.object<User>({}).keys({
+    name: Joi.string().required(),
+    email: Joi.string().email().required()
+})
+
 export const getAllUsersSchema = Joi.object().keys({
     page: Joi.number().optional(),
     limit: Joi.number().optional(),
