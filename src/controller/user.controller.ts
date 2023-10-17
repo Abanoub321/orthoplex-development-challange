@@ -4,7 +4,8 @@ import userService from "../services/user.service";
 
 class UserController {
     async getAll(req: Request, res: Response, next: NextFunction) {
-        const users = await userService.findAll();
+        const { page, limit } = req.query;
+        const users = await userService.findAll(page as string, limit as string);
         return response(res, 200, {
             message: 'Users found successfully',
             data: users,

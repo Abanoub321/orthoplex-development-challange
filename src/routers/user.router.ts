@@ -3,12 +3,14 @@ import { Router } from "express";
 import asyncHandler from "../utils/asyncHandler";
 import userController from "../controller/user.controller";
 import joiAsyncMiddleWare from "../middlewares/joiMiddleware";
-import { userSchema } from "../validators/userValidations";
+import { userSchema, getAllUsersSchema } from "../validators/userValidations";
 
 const router = Router();
 
 router.route('/')
-    .get(asyncHandler(userController.getAll))
+    .get(
+        joiAsyncMiddleWare(getAllUsersSchema, 'query'),
+        asyncHandler(userController.getAll))
     .post(
         joiAsyncMiddleWare(userSchema),
         asyncHandler(userController.create));

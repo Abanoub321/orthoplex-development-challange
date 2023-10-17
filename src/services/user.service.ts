@@ -25,9 +25,10 @@ class UserService {
         return user as User[];
     }
 
-    async findAll() {
+    async findAll(page: string = '1', limit: string = '10') {
         const users = await prisma.$queryRaw`
             SELECT * FROM "User"
+            LIMIT ${+limit} OFFSET ${(+page - 1) * +limit}
         `;
         return users as User[];
     }
