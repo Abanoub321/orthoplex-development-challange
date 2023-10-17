@@ -1,6 +1,7 @@
 import { User } from "@prisma/client";
 import AppError from "../utils/appError";
 import prisma from "../../prisma/client";
+import bcrypt from "bcrypt";
 
 class UserService {
     async create({ name, email, password }: Partial<User>) {
@@ -8,9 +9,10 @@ class UserService {
         if (userExists.length > 0) {
             throw new AppError('User already exists', 400);
         }
+        let hashedPassword = await bcrypt.hash(password!, 10);
         const user = await prisma.$queryRaw`
             INSERT INTO "User" (name, email, password)
-            VALUES (${name}, ${email}, ${password})
+            VALUES (${name}, ${email}, ${hashedPassword})
             RETURNING *
         `;
         return user;
